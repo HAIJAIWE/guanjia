@@ -1,90 +1,91 @@
-# guanjia（管家）系列技能
+# guanjia — Smart Dispatch Skill
 
-> 你工具有一堆 Agent、Skill、MCP，但不知道什么时候该用哪个？管家帮你统一调度。
+> Got tons of Agents, Skills, and MCP tools but don't know when to use which? Let guanjia handle the dispatch.
 
-## 为什么要用管家
+## Why guanjia?
 
-AI 编码工具（Trae、Cursor、Claude Code 等）装了一堆技能：代码搜索、后端开发、前端设计、API 测试……但每次你提需求，AI 不知道该调哪个，经常用错工具或者漏掉该用的。
+AI coding tools (Trae, Cursor, Claude Code, etc.) can have many skills installed: code search, backend dev, frontend design, API testing... When you ask for something, the AI often picks the wrong tool or misses the right one.
 
-管家就是解决这个问题的：
+guanjia solves this:
 
-1. 你提需求 → 管家扫描当前所有可用的工具
-2. 逐个分析哪个工具最适合你的任务，打分排序
-3. 弹窗列出最合适的 top 10，让你勾选确认
-4. 按顺序串行调用，前一个的输出传给后一个
+1. You make a request → guanjia scans all available tools
+2. Scores each tool against your task, ranks by relevance
+3. Pops a multi-select dialog with the top 10 matches
+4. Calls them in order, passing context from one to the next
 
-你不用手动指定工具，也不用担心用错了。
-
----
-
-## 版本选择
-
-| 文件夹 | 版本 | 说明 |
-|--------|------|------|
-| `guanjia-auto` | **主动接管** | 装好就自动生效，全程调度所有对话 |
-| `guanjia-passive` | **被动接管** | 不喊不出来，说"管家"才触发 |
-
-选一个版本安装即可，不需要两个都装。
+No more guessing which tool to use.
 
 ---
 
-## 安装
+## Versions
 
-选好版本，把对应文件夹放到工具的 skills 目录：
+| Folder | Version | Behavior |
+|--------|---------|----------|
+| `guanjia-auto` | **Auto mode** | Activates automatically, handles every message |
+| `guanjia-passive` | **Passive mode** | Only responds to "管家/guanjia/GUANJIA" |
+
+Pick one version. Don't install both.
+
+---
+
+## Installation
+
+Place the chosen folder in your tool's skills directory:
 
 ```
-你的项目/
+your-project/
 └── .trae/skills/
-    ├── guanjia-auto/      ← 或用被动版
+    ├── guanjia-auto/      ← or passive version
     │   └── SKILL.md
     └── ...
 ```
 
-opencode 则放在 `~/.claude/skills/<版本名>/SKILL.md`。
+For opencode: `~/.claude/skills/<version-name>/SKILL.md`.
 
 ---
 
-## 使用方法
+## Usage
 
-### 主动版（guanjia-auto）
+### Auto mode (guanjia-auto)
 
-安装即生效，不需要喊它。你正常说话，管家自动检测 → 匹配 → 弹窗选择 → 调用干活。
-
-```
-你：帮我搜索一下最新的AI资讯       ← 管家自动处理
-你：写一个登录页面                 ← 管家自动处理
-你：测试一下API                   ← 管家自动处理
-```
-
-说 `退出管家` 或 `解除接管` 可退出。
-
-> ⚠️ **注意**：主动版优先级很高，每条消息都会触发检测匹配。如果你不需要自动调度，建议用被动版，否则会产生额外算力消耗。
-
-### 被动版（guanjia-passive）
-
-只有你喊它才出来，不影响正常对话。
+Works out of the box. Just talk normally — guanjia detects, matches, and dispatches automatically.
 
 ```
-你：帮我写个登录页面               ← 正常对话，管家不干预
-你：管家，帮我检测一下有哪些工具可用  ← 管家触发
-你：继续                          ← 继续上次分配
-你：谢谢                          ← 正常对话，管家不干预
+You: search the latest AI news         ← handled by guanjia
+You: write a login page                 ← handled by guanjia
+您：测试API ← 由管家处理
 ```
 
-干完活就退，下次再用再喊。
+说`退出管家`或`解除接管`以退出。
+
+⚠️**：自动模式会拦截每条消息，这可能会占用额外的计算资源。如果您不需要完全自动化，请改用被动模式。
+
+### Passive mode (guanjia-passive)
+
+仅在被调用时触发。正常对话流程不受影响。
+
+```
+您：编写登录页面 ← 正常，无管家
+
+您：继续 ← 继续之前的任务
+你：谢谢 ← 正常，无管家
+
+
+任务完成后退出。需要时再调用。
 
 ---
 
-## 内部原理
+## How it works
 
-1. **Step 0** — 扫描所有 Agent、Skill、MCP
-2. **Stage 1** — 分析你的任务意图
-3. **Stage 2** — 逐个打分（能力契合 + 任务匹配 + 类别精准）
-4. **Stage 3** — 弹窗列出 top 10，让你勾选
-5. **Stage 4** — 按分数从高到低串行调用，传上下文
+1. **步骤0**— 扫描所有客服人员、技能、MCP工具
+2. **Stage 1** — Classify your intent
+3. **Stage 2** — Score each candidate (fit + match + precision)
+4. **Stage 3** — Show top 10 in a multi-select dialog
+5. **阶段4**— 按顺序调用选定的工具，并传递上下文
 
 ---
 
-## 版权
+## License
 
-© 2026年5月14日 墨白 — All Rights Reserved
+© 2026 墨白 — 保留所有权利
+
