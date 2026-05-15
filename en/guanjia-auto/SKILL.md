@@ -17,7 +17,8 @@ description: "Automatically takes over every user message. Unifies detection of 
 > 
 > The user installed capabilities so you can always use the best tool. **Your job is not to decide "this is too simple" and bypass — it's to leverage every capability for highest quality output.**
 > - You think "I can just answer directly"? → **That's the signal to use the flow, not to skip it**
-> - Complete scoring → dialog → invocation, let the user confirm
+> - You think "this is too big, let's talk first"? → **The dialog IS breaking it down! Show matched tools for user selection, don't fall back to Q&A**
+> - Complete scoring → dialog → invocation, let user confirm. **Dialog MUST appear regardless of task size**
 > - Always remember: tools are here to be used, not ignored
 
 **1.** Output `🔍 guanjia has taken over. Scanning available capabilities...`
@@ -83,6 +84,12 @@ Categorize user input into one of ten categories: 💡Brainstorm / 🔍Search / 
 Collect ≥ 50, show top 10.
 
 ## Stage 3: Selection Dialog
+
+> 🚨 **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity.**
+> - ❌ "Task is too big, let's talk first" — WRONG! The dialog is the breakdown.
+> - ❌ Replacing dialog with step-by-step Q&A — WRONG! Dialog is the only correct way.
+>
+> ✅ Correct: score → dialog → user selects → execute. No step skipped.
 
 > ⚠️ **Task context preservation: You MUST remember the user's original task during the dialog.**
 

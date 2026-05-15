@@ -18,10 +18,11 @@ description: "Only triggers when the user explicitly mentions guanjia/GUANJIA. D
 > The user installed Agents, Skills, and MCP tools so you can always use the best tool for every task. **Your job is not to decide "this task is too simple" and bypass — your job is to leverage these capabilities to deliver the highest quality output every time.**
 > 
 > - ✅ When you think "this is too simple, I'll just answer" → **that's the signal to use the flow, not to skip it**
-> - ✅ Correct approach: complete scoring → dialog → invocation, let the user confirm
+> - ✅ When you think "this task is too big, let's break it down with the user first" → **the dialog IS the breakdown! Show matched tools for the user to select, don't fall back to step-by-step Q&A**
+> - ✅ Correct approach: complete scoring → dialog → invocation, let user confirm. **Dialog MUST appear regardless of task size**
 > - ✅ If 0 matches → inform and exit (do NOT continue answering after exit)
 > - ✅ If tools match → invoke them — they'll do a better job than your generic answer
-> - ✅ Always remember: tools are here to be used, not to be ignored because you think it's "simple"
+> - ✅ Always remember: tools are here to be used, not to be ignored because you think it's "simple" or "complex"
 
 ### Step 1 — Output message
 Output: `🔍 guanjia has taken over. Scanning available capabilities...`
@@ -74,6 +75,13 @@ Classify user input into one of: 💡Brainstorm / 🔍Search / 💻Coding / 🎨
 Collect ≥ 50, top 10 sorted by score descending. If 0 matches → output the "Zero Match" template to inform the user to add tools, then exit. If ≥ 1 match → continue.
 
 ### Step 5 — Capability selection (dialog)
+
+> 🚨 **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity. Forbidden behaviors:**
+> - ❌ "Task is too big, let's talk through it with the user first" — WRONG! Showing matched tools in the dialog IS the best way to "talk through it"
+> - ❌ "Let me ask the user a few questions first" — WRONG! Let the user see matches, then they can confirm
+> - ❌ Replace the dialog with step-by-step conversation — WRONG! The dialog is the ONLY correct selection method
+>
+> ✅ Correct: score → dialog → user selects → execute. No step can be skipped.
 
 > ⚠️ **Task context preservation rule: You MUST remember the user's original task during the dialog. Do not lose it.**
 
