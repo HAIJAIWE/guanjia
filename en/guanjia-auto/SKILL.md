@@ -103,7 +103,20 @@ Intent: {user task} → {intent category}
 Found {K} matching capabilities. Select them in the dialog below ↓
 ```
 
-Then call `AskUserQuestion` tool with `"multiSelect": true` (even with 1 option, never single-select). Wait for user confirmation, then proceed to Stage 4.
+Then call `AskUserQuestion` tool. Since each question supports at most 4 options, split the top 10 tools into groups of 4 across multiple questions (up to 4 questions max), each group as a separate selection area:
+
+- Each question's `header` format: `"🧰 Select Execution Tool ({group}/{total})"`
+- Each option's `label` format: `"{name} ({type})"`, `description` format: `"description — {match label}"`
+- All questions must use `"multiSelect": true` (even if a group has only 1 option)
+
+**Splitting example (10 tools):**
+```
+Q1 (header: "🧰 Select Execution Tool (1/3)") → 4 options (rank #1-4)
+Q2 (header: "🧰 Select Execution Tool (2/3)") → 4 options (rank #5-8)
+Q3 (header: "🧰 Select Execution Tool (3/3)") → 2 options (rank #9-10)
+```
+
+Wait for user confirmation, then proceed to Stage 4.
 
 ## Stage 4: Sequential Execution
 
