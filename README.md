@@ -50,13 +50,14 @@ Skill/
 
 ```
 你的项目/
-└── .trae/skills/
+└── .trae/skills/                          ← Trae CN
     ├── guanjia-auto/      ← 或用 guanjia-passive
     │   └── SKILL.md
     └── ...
-```
 
-opencode 则放在 `~/.claude/skills/<版本名>/SKILL.md`。
+~/.workbuddy/skills/<版本名>/SKILL.md      ← WorkBuddy
+~/.claude/skills/<版本名>/SKILL.md         ← opencode
+```
 
 ***
 
