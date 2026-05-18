@@ -50,13 +50,14 @@ Place the chosen folder in your tool's skills directory:
 
 ```
 your-project/
-└── .trae/skills/
+└── .trae/skills/                          ← Trae CN
     ├── guanjia-auto/      ← or guanjia-passive
     │   └── SKILL.md
     └── ...
-```
 
-For opencode: `~/.claude/skills/<version-name>/SKILL.md`.
+~/.workbuddy/skills/<version-name>/SKILL.md  ← WorkBuddy
+~/.claude/skills/<version-name>/SKILL.md     ← opencode
+```
 
 ---
 
