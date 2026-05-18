@@ -1,6 +1,7 @@
 ---
 name: "guanjia-auto"
 description: "Automatically takes over every user message. Unifies detection of all available capabilities (Agent/Skill/MCP), scores by semantic relevance, pops a dialog for user selection, then dispatches with task context preserved. On zero match, informs user to add tools without interrupting."
+agent_created: true
 ---
 
 # guanjia — Auto Dispatch Mode
@@ -9,16 +10,16 @@ description: "Automatically takes over every user message. Unifies detection of 
 
 ---
 
-## 🚨 Execute Immediately
+## Execute Immediately
 
-> ⚠️ **MANDATORY: Never output raw tool-call markup in conversation (such as &lt;function=Skill&gt;, &lt;parameter&gt;, &lt;/tool_call&gt;, etc.). All tool invocations must go through the system tool interface, never rendered as text.**
+> MANDATORY: Never output raw tool-call markup in conversation (such as &lt;function=Skill&gt;, &lt;parameter&gt;, &lt;/tool_call&gt;, etc.). All tool invocations must go through the system tool interface, never rendered as text.
 
-> **⚡ Core philosophy: tools exist to improve efficiency and quality, not as decoration.**
+> Core philosophy: tools exist to improve efficiency and quality, not as decoration.
 > 
-> The user installed capabilities so you can always use the best tool. **Your job is not to decide "this is too simple" and bypass — it's to leverage every capability for highest quality output.**
-> - You think "I can just answer directly"? → **That's the signal to use the flow, not to skip it**
-> - You think "this is too big, let's talk first"? → **The dialog IS breaking it down! Show matched tools for user selection, don't fall back to Q&A**
-> - Complete scoring → dialog → invocation, let user confirm. **Dialog MUST appear regardless of task size**
+> The user installed capabilities so you can always use the best tool. Your job is not to decide "this is too simple" and bypass — it's to leverage every capability for highest quality output.
+> - You think "I can just answer directly"? → That's the signal to use the flow, not to skip it
+> - You think "this is too big, let's talk first"? → The dialog IS breaking it down! Show matched tools for user selection, don't fall back to Q&A
+> - Complete scoring → dialog → invocation, let user confirm. Dialog MUST appear regardless of task size
 > - Always remember: tools are here to be used, not ignored
 
 **1.** Output `🔍 guanjia has taken over. Scanning available capabilities...`
@@ -31,11 +32,11 @@ description: "Automatically takes over every user message. Unifies detection of 
 
 ## Core Mission
 
-- 🔍 **Pre-check**: Scan which Agents, Skills, and MCP tools are available
-- 🎯 **Semantic Match Scoring**: Truly understand user intent, not keyword matching
-- 🪟 **Selection Dialog**: Use the AskUserQuestion tool to let the user pick
-- ⚠️ **Zero-match Alert**: Inform the user when nothing matches and suggest adding new capabilities
-- 🎯 **Task Preservation**: After tool selection, the original task is passed in full to invoked tools
+- **Pre-check**: Scan which Agents, Skills, and MCP tools are available
+- **Semantic Match Scoring**: Truly understand user intent, not keyword matching
+- **Selection Dialog**: Use the AskUserQuestion tool to let the user pick
+- **Zero-match Alert**: Inform the user when nothing matches and suggest adding new capabilities
+- **Task Preservation**: After tool selection, the original task is passed in full to invoked tools
 
 ---
 
@@ -49,7 +50,7 @@ Categorize user input into one of ten categories: 💡Brainstorm / 🔍Search / 
 
 ## Stage 2: Semantic Match Scoring
 
-> 🧠 **Core principle: truly understand user intent, not keyword-based matching.**
+> **Core principle: truly understand user intent, not keyword-based matching.**
 >
 > For each candidate capability, perform three-layer semantic analysis before scoring (0-100):
 
@@ -67,7 +68,7 @@ Categorize user input into one of ten categories: 💡Brainstorm / 🔍Search / 
 - Can this capability **substantially** help with the user's task?
 - Is it genuine "semantic overlap" or just "keyword coincidence"?
 
-> ❌ **Forbidden (keyword traps):**
+> **Forbidden (keyword traps):**
 > - "design" ≠ frontend-design — first check: UI mockup or system architecture?
 > - "API" ≠ backend-architect — first check: designing an API or calling/testing one?
 > - "optimize" ≠ performance-expert — first check: code performance or process optimization?
@@ -85,13 +86,13 @@ Collect ≥ 50, show top 10.
 
 ## Stage 3: Selection Dialog
 
-> 🚨 **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity.**
-> - ❌ "Task is too big, let's talk first" — WRONG! The dialog is the breakdown.
-> - ❌ Replacing dialog with step-by-step Q&A — WRONG! Dialog is the only correct way.
+> **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity.**
+> - "Task is too big, let's talk first" — WRONG! The dialog is the breakdown.
+> - Replacing dialog with step-by-step Q&A — WRONG! Dialog is the only correct way.
 >
-> ✅ Correct: score → dialog → user selects → execute. No step skipped.
+> Correct: score → dialog → user selects → execute. No step skipped.
 
-> ⚠️ **Task context preservation: You MUST remember the user's original task during the dialog.**
+> **Task context preservation: You MUST remember the user's original task during the dialog.**
 
 First output match summary:
 ```
@@ -120,9 +121,9 @@ Wait for user confirmation, then proceed to Stage 4.
 
 ## Stage 4: Sequential Execution
 
-> 🎯 **Critical: Pass the user's original task in full to every invoked tool.**
+> **Critical: Pass the user's original task in full to every invoked tool.**
 
-Execute in user-selected order (Skill → `skill` tool, Agent → `task` tool, MCP → direct call), passing previous output to next.
+Execute in user-selected order (Skill → `Skill` tool, Agent → `Agent` tool, MCP → direct call), passing previous output to next.
 
 ## Stage 3B: Zero Match
 

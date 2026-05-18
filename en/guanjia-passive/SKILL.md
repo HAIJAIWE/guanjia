@@ -1,6 +1,7 @@
 ---
 name: "guanjia-passive"
 description: "Only triggers when the user explicitly mentions guanjia/GUANJIA. Detects available capabilities, scores by semantic relevance, pops a dialog for selection, executes in order with task context preserved. Informs user to add tools if nothing matches. Do not activate otherwise."
+agent_created: true
 ---
 
 # guanjia
@@ -9,20 +10,20 @@ description: "Only triggers when the user explicitly mentions guanjia/GUANJIA. D
 
 ---
 
-## 🚨 Follow these steps strictly in order. Do not skip any step. Do not change order.
+## Follow these steps strictly in order. Do not skip any step. Do not change order.
 
-> ⚠️ **MANDATORY: Never output raw tool-call markup in conversation (such as &lt;function=Skill&gt;, &lt;parameter&gt;, &lt;/tool_call&gt;, etc.). All tool invocations must go through the system tool interface, never rendered as text.**
+> MANDATORY: Never output raw tool-call markup in conversation (such as &lt;function=Skill&gt;, &lt;parameter&gt;, &lt;/tool_call&gt;, etc.). All tool invocations must go through the system tool interface, never rendered as text.
 
-> **⚡ Core philosophy: tools exist to improve efficiency and quality, not as decoration.**
+> Core philosophy: tools exist to improve efficiency and quality, not as decoration.
 > 
-> The user installed Agents, Skills, and MCP tools so you can always use the best tool for every task. **Your job is not to decide "this task is too simple" and bypass — your job is to leverage these capabilities to deliver the highest quality output every time.**
+> The user installed Agents, Skills, and MCP tools so you can always use the best tool for every task. Your job is not to decide "this task is too simple" and bypass — your job is to leverage these capabilities to deliver the highest quality output every time.
 > 
-> - ✅ When you think "this is too simple, I'll just answer" → **that's the signal to use the flow, not to skip it**
-> - ✅ When you think "this task is too big, let's break it down with the user first" → **the dialog IS the breakdown! Show matched tools for the user to select, don't fall back to step-by-step Q&A**
-> - ✅ Correct approach: complete scoring → dialog → invocation, let user confirm. **Dialog MUST appear regardless of task size**
-> - ✅ If 0 matches → inform and exit (do NOT continue answering after exit)
-> - ✅ If tools match → invoke them — they'll do a better job than your generic answer
-> - ✅ Always remember: tools are here to be used, not to be ignored because you think it's "simple" or "complex"
+> - When you think "this is too simple, I'll just answer" → that's the signal to use the flow, not to skip it
+> - When you think "this task is too big, let's break it down with the user first" → the dialog IS the breakdown! Show matched tools for the user to select, don't fall back to step-by-step Q&A
+> - Correct approach: complete scoring → dialog → invocation, let user confirm. Dialog MUST appear regardless of task size
+> - If 0 matches → inform and exit (do NOT continue answering after exit)
+> - If tools match → invoke them — they'll do a better job than your generic answer
+> - Always remember: tools are here to be used, not to be ignored because you think it's "simple" or "complex"
 
 ### Step 1 — Output message
 Output: `🔍 guanjia has taken over. Scanning available capabilities...`
@@ -33,11 +34,11 @@ Scan all Agents, Skills, and MCP tools. Read their descriptions. Build a capabil
 ### Step 3 — Intent classification
 Classify user input into one of: 💡Brainstorm / 🔍Search / 💻Coding / 🎨UI·Design / 🧪Testing / 🚀Deploy·Ops / ⚡Performance / 🤖AI·ML / 📋Compliance / 🔧Tool·Data / ❓Unknown. Multiple categories allowed.
 
-> 💡 **Hint: the tools you have are here to improve efficiency and quality.** Even if you think "I can answer directly", go through the scoring flow — there may be a specialized tool that can do a better job than your generic answer.
+> **Hint: the tools you have are here to improve efficiency and quality.** Even if you think "I can answer directly", go through the scoring flow — there may be a specialized tool that can do a better job than your generic answer.
 
 ### Step 4 — Semantic match scoring
 
-> 🧠 **Core principle: truly understand user intent, not keyword-based matching.**
+> **Core principle: truly understand user intent, not keyword-based matching.**
 >
 > For each candidate capability, perform the following three-layer semantic analysis before scoring (0-100):
 
@@ -57,7 +58,7 @@ Classify user input into one of: 💡Brainstorm / 🔍Search / 💻Coding / 🎨
 - Can this capability **substantially** help with the user's task?
 - Is it genuine "semantic overlap" or just "keyword coincidence"?
 
-> ❌ **Forbidden behaviors (keyword traps):**
+> **Forbidden behaviors (keyword traps):**
 > - Don't blindly score "design" → frontend-design high — first determine if user wants "UI mockup" or "system architecture"
 > - Don't blindly score "API" → backend-architect high — first determine if user wants "design an API" or "call/test an API"
 > - Don't blindly score "optimize" → performance-expert high — first determine if it's "code performance" or "process optimization"
@@ -76,14 +77,14 @@ Collect ≥ 50, top 10 sorted by score descending. If 0 matches → output the "
 
 ### Step 5 — Capability selection (dialog)
 
-> 🚨 **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity. Forbidden behaviors:**
-> - ❌ "Task is too big, let's talk through it with the user first" — WRONG! Showing matched tools in the dialog IS the best way to "talk through it"
-> - ❌ "Let me ask the user a few questions first" — WRONG! Let the user see matches, then they can confirm
-> - ❌ Replace the dialog with step-by-step conversation — WRONG! The dialog is the ONLY correct selection method
+> **Dialog Mandatory Rule: The selection dialog MUST appear regardless of task size or complexity. Forbidden behaviors:**
+> - "Task is too big, let's talk through it with the user first" — WRONG! Showing matched tools in the dialog IS the best way to "talk through it"
+> - "Let me ask the user a few questions first" — WRONG! Let the user see matches, then they can confirm
+> - Replace the dialog with step-by-step conversation — WRONG! The dialog is the ONLY correct selection method
 >
-> ✅ Correct: score → dialog → user selects → execute. No step can be skipped.
+> Correct: score → dialog → user selects → execute. No step can be skipped.
 
-> ⚠️ **Task context preservation rule: You MUST remember the user's original task during the dialog. Do not lose it.**
+> **Task context preservation rule: You MUST remember the user's original task during the dialog. Do not lose it.**
 
 First output match summary:
 ```
@@ -112,13 +113,13 @@ Wait for user to confirm selection, then proceed to Step 6.
 
 ### Step 6 — Sequential execution
 
-> 🎯 **Critical: Pass the user's original task in full to every invoked tool.**
+> **Critical: Pass the user's original task in full to every invoked tool.**
 >
 > Every invoked tool must receive: the user's original question + guanjia matching context.
 
 Invoke each selected capability:
 - **Skill** → use `Skill` tool, name = skill name
-- **Agent** → use `Task` tool, subagent_type = agent type
+- **Agent** → use `Agent` tool, subagent_type = agent type
 - **MCP** → call the corresponding MCP tool directly
 
 **Pipeline rule**: Previous tool's output is passed as context to the next, forming a pipeline.
@@ -142,13 +143,13 @@ Exit after execution. Re-trigger by saying "guanjia" next time.
 
 ### Core Mission
 
-- 🔍 **Pre-check**: On trigger, scan which Agents, Skills, and MCP tools are available, build an inventory
-- 🎯 **Semantic Match Scoring**: Truly understand user intent and capability descriptions, match semantically not by keywords
-- 🪟 **Selection Dialog**: Use the AskUserQuestion tool to let the user pick
-- ⚠️ **Zero-match Alert**: Notify user when nothing matches and suggest adding new capabilities
-- 🔄 **Cross-tool compatible**: Works with Trae / Cursor / Copilot / Windsurf and others
-- 🚫 **guanjia doesn't do the work**: It only dispatches, doesn't replace underlying tools
-- 🎯 **Task preservation**: After tool selection, the original task is passed in full to invoked tools
+- **Pre-check**: On trigger, scan which Agents, Skills, and MCP tools are available, build an inventory
+- **Semantic Match Scoring**: Truly understand user intent and capability descriptions, match semantically not by keywords
+- **Selection Dialog**: Use the AskUserQuestion tool to let the user pick
+- **Zero-match Alert**: Notify user when nothing matches and suggest adding new capabilities
+- **Cross-tool compatible**: Works with any tool that supports Agent/Skill/MCP
+- **guanjia doesn't do the work**: It only dispatches, doesn't replace underlying tools
+- **Task preservation**: After tool selection, the original task is passed in full to invoked tools
 
 ### Detection Method
 
@@ -207,19 +208,6 @@ Then exit.
 
 ### Cross-tool Compatibility
 
-This Skill is not tied to any specific tool. Different tools (Trae/Cursor/Copilot/Windsurf) may have different trigger mechanisms, but the prompt body (Steps 1-7 + Reference) can be used directly without modification.
-
-## Execution Checklist
-
-- [ ] **Step 1**: Output "guanjia has taken over"
-- [ ] **Step 2**: Scan all Agents/Skills/MCP, build inventory, exclude self
-- [ ] **Step 3**: Classify user intent
-- [ ] **Step 4**: Semantic 3-layer scoring, collect top 10 with ≥ 50
-- [ ] **Branch**: 0 matches → output zero-match message and exit
-- [ ] **Step 5**: AskUserQuestion dialog for capability selection (remember original task)
-- [ ] **Step 6**: Sequential invocation, pass original task context to tools
-- [ ] **Step 7**: Exit
-
----
+This Skill is not tied to any specific tool. The prompt body (Steps 1-7 + Reference) can be used directly in any tool that supports Agent/Skill/MCP without modification.
 
 © 2026 墨白 — All Rights Reserved
